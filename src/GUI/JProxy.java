@@ -36,17 +36,8 @@ public class JProxy {
 
 //        Utils.setShowDList(Utils.getCategoryList());
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+        setLookAndFeel();
+
         mainFrame = new JFrame(title);
         mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         ImageIcon iconImg = new ImageIcon("icons/Icon.png");
@@ -89,6 +80,20 @@ public class JProxy {
             INSTANCE = new JProxy("JProxy");
         }
         return INSTANCE;
+    }
+
+    private void setLookAndFeel(){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
