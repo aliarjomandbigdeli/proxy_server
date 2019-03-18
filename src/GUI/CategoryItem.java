@@ -3,13 +3,21 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class categoryItem extends ListItem {
+/**
+ * this class designs gui of every category item panel
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
+public class CategoryItem extends ListItem {
     public JCheckBox selectChk;
     private JLabel categoryLBL;
     private String categoryName;
 
-    public categoryItem(Dimension dim, String catName) {
+    public CategoryItem(Dimension dim, String catName) {
         super(dim);
+        this.setPreferredSize(dim);
+        setLayout(sp);
         categoryName = catName;
         setupComponent();
     }

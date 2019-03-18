@@ -1,6 +1,6 @@
 package GUI;
 
-import Models.Backend;
+import Logic.Backend;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-
+/**
+ * this class designs a scrollable
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class ScrollablePanel extends JPanel implements MouseListener , ActionListener {
     protected JScrollPane pane;
     public ListItemPanel itemsList;

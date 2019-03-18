@@ -1,9 +1,9 @@
-package Models;
+package Logic;
 
+import GUI.CategoryItem;
 import GUI.JProxy;
 import GUI.ListItem;
-import GUI.categoryItem;
-import GUI.urlItem;
+import GUI.URLItemPanel;
 
 import java.awt.*;
 import java.io.*;
@@ -12,6 +12,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+
+/**
+ * this class handles logic of the program
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class Backend {
     private static ArrayList<String> blockedList;
     public static ArrayList<ListItem> categories;
@@ -42,9 +49,9 @@ public class Backend {
      * @param categoryName
      */
     public void addCategory(String categoryName) {
-        categories.add(new categoryItem(new Dimension(categoryWidth, itemH), categoryName));
+        categories.add(new CategoryItem(new Dimension(categoryWidth, itemH), categoryName));
         categories.get(categories.size() - 1).addMouseListener(ui.categoriesPanel);
-        ((categoryItem) (categories.get(categories.size() - 1))).selectChk.addActionListener(ui.categoriesPanel);
+        ((CategoryItem) (categories.get(categories.size() - 1))).selectChk.addActionListener(ui.categoriesPanel);
         ArrayList<ListItem> tmpUrl = new ArrayList<>();
         urls.add(tmpUrl);
         ui.categoriesPanel.itemsList.updateListView(categories);
@@ -57,16 +64,16 @@ public class Backend {
      * @param categoryID
      */
     public void addNewUrl(String url, int categoryID) {
-        ListItem tmpURL = new urlItem(new Dimension(urlWidth, itemH), url);
+        ListItem tmpURL = new URLItemPanel(new Dimension(urlWidth, itemH), url);
         urls.get(categoryID).add(tmpURL);
         ui.urlsPanel.itemsList.updateListView(urls.get(categoryID));
-        ((urlItem) tmpURL).deleteBTN.addMouseListener(ui.urlsPanel);
-        ((urlItem) tmpURL).setRawUrl(prepareBlockedURL(url));
-        ((urlItem) tmpURL).selectChk.setEnabled(false);
-        if (((categoryItem) (categories.get(categoryID))).selectChk.isSelected()) {
-            ((urlItem) tmpURL).selectChk.setSelected(true);
+        ((URLItemPanel) tmpURL).deleteBTN.addMouseListener(ui.urlsPanel);
+        ((URLItemPanel) tmpURL).setRawUrl(prepareBlockedURL(url));
+        ((URLItemPanel) tmpURL).selectChk.setEnabled(false);
+        if (((CategoryItem) (categories.get(categoryID))).selectChk.isSelected()) {
+            ((URLItemPanel) tmpURL).selectChk.setSelected(true);
         } else {
-            blockedList.add(((urlItem) tmpURL).getRawUrl());
+            blockedList.add(((URLItemPanel) tmpURL).getRawUrl());
         }
         ui.categoriesPanel.setSelected(null, categoryID);
     }
@@ -78,7 +85,7 @@ public class Backend {
      * @param UrlID
      */
     public void deleteURL(int catID, int UrlID) {
-        blockedList.remove(((urlItem) urls.get(catID).remove(UrlID)).getRawUrl());
+        blockedList.remove(((URLItemPanel) urls.get(catID).remove(UrlID)).getRawUrl());
         urls.get(catID).remove(UrlID);
         ui.urlsPanel.itemsList.updateListView(urls.get(catID));
     }
@@ -118,27 +125,30 @@ public class Backend {
             fileEntry.delete();
 
         for (int i = 0; i < categories.size(); i++) {
-            PrintWriter writer = new PrintWriter("./AppData/" + ((categoryItem) categories.get(i)).getCategoryName() + ".txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("./AppData/" + ((CategoryItem) categories.get(i)).getCategoryName() + ".txt", "UTF-8");
             for (int j = 0; j < urls.get(i).size(); j++)
-                writer.println(((urlItem) urls.get(i).get(j)).getUrlAddress());
+                writer.println(((URLItemPanel) urls.get(i).get(j)).getUrlAddress());
             writer.close();
         }
     }
 
     public static boolean checkValidityOfURL(String address) {
+        //first we remove http://www. from url is exist
         String temp = prepareBlockedURL(address);
-        System.out.println(temp);
+
+        //check url among all urls
         for (int i = 0; i < urls.size(); i++) {
             for (int j = 0; j < urls.get(i).size(); j++) {
-                if (((urlItem) urls.get(i).get(j)).getRawUrl().equals(temp)) {
-                    if (((categoryItem) categories.get(i)).selectChk.isSelected())
+                String urlStr = ((URLItemPanel) urls.get(i).get(j)).getRawUrl();
+                if (temp.contains(urlStr) || urlStr.contains(temp)) {
+                    if (((URLItemPanel) urls.get(i).get(j)).selectChk.isSelected())
                         return false;
                     else
                         return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public void startProxy() {
@@ -167,10 +177,10 @@ public class Backend {
     public void makeBlockedList() {
         blockedList.clear();
         for (int i = 0; i < categories.size(); i++) {
-            if (!((categoryItem) categories.get(i)).selectChk.isSelected()) {
+            if (!((CategoryItem) categories.get(i)).selectChk.isSelected()) {
                 for (int j = 0; j < urls.get(i).size(); j++) {
-                    if (!((urlItem) urls.get(i).get(j)).selectChk.isSelected()) {
-                        blockedList.add(((urlItem) urls.get(i).get(j)).getRawUrl());
+                    if (!((URLItemPanel) urls.get(i).get(j)).selectChk.isSelected()) {
+                        blockedList.add(((URLItemPanel) urls.get(i).get(j)).getRawUrl());
                     }
                 }
             }

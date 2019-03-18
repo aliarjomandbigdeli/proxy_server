@@ -1,17 +1,16 @@
 package GUI;
 
-import Models.Backend;
-import Models.SocketListener;
+import Logic.Backend;
+import Logic.SocketListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
 
 /**
- * this runs main frame of JProxy application
+ * this class runs main frame of JProxy application
  *
  * @author Ali ArjomandBigdeli
  * @since 3.18.2018
@@ -32,10 +31,10 @@ public class JProxy {
 
     private Backend backend;
 
-    public boolean stopStartStatus;
+    public boolean runPauseStatus;
 
     private JProxy(String title) {
-        backend = new Backend(new Dimension(520, 600), 350, 150, this);
+        backend = new Backend(new Dimension(520, 600), 450, 150, this);
 
         setLookAndFeel();
 
@@ -242,7 +241,9 @@ public class JProxy {
     public void showGUI() {
         System.out.println(mainFrame.getPreferredSize());
         mainFrame.setMinimumSize(new Dimension(480 + 200, 370 + 50));
-        mainFrame.setPreferredSize(new Dimension(480 + 295, 370 + 150));
+//        mainFrame.setPreferredSize(new Dimension(480 + 295, 370 + 150));
+        mainFrame.setPreferredSize(new Dimension(480 + 215, 370 + 150));
+        mainFrame.setResizable(false);
         mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
@@ -277,18 +278,18 @@ public class JProxy {
     }
 
     private void startStopProxyController() throws IOException {
-        if (stopStartStatus) { // start -> stop
+        if (runPauseStatus) { // start -> stop
             backend.stopProxy();
             statusLabel.setText("<html> Status : OFF<BR> Port : <BR> IP : 127.0.0.1<BR>Select checkboxes to allow traffic</html>");
             playPauseBtn.setIcon(new ImageIcon("./icons/Play.png"));
-            stopStartStatus = false;
+            runPauseStatus = false;
         } else { // stop -> start
             makeBlockList();
             backend.startProxy();
             statusLabel.setText("<html> Status : ON<BR> Port : " + ((SocketListener) backend.r).serverPort + "<BR> IP : 127.0.0.1<BR>" +
                     "Select checkboxes to allow traffic </html>");
             playPauseBtn.setIcon(new ImageIcon("./icons/Pause.png"));
-            stopStartStatus = true;
+            runPauseStatus = true;
         }
     }
 

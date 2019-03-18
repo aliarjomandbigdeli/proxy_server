@@ -5,6 +5,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * this class designs gui of every item panel
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class ListItem extends JPanel implements MouseListener {
 
     protected Dimension panelDim;
@@ -15,10 +21,8 @@ public class ListItem extends JPanel implements MouseListener {
     }
     public ListItem(Dimension dim){
         super();
-        this.setPreferredSize(dim);
         panelDim = dim;
         sp = new SpringLayout();
-        setLayout(sp);
         addMouseListener(this);
         setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.black));
     }

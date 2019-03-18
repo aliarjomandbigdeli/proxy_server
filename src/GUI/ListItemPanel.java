@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * this class designs gui of every category item panel
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class ListItemPanel extends JPanel {
 
     protected SpringLayout sp;

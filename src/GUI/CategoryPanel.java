@@ -1,12 +1,17 @@
 package GUI;
 
-import Models.Backend;
+import Logic.Backend;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
-
+/**
+ * this class designs gui of whole category list items
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class CategoryPanel extends ScrollablePanel {
 
     public CategoryPanel(Dimension dim, Backend back) {
@@ -35,25 +40,25 @@ public class CategoryPanel extends ScrollablePanel {
             if (i == id) {
 //                back.categories.get(i).setBackground(new Color(249, 132, 132));
                 back.categories.get(i).setBackground(Color.gray);
-//                ((categoryItem) (back.categories.get(i))).selectChk.setBackground(new Color(249, 132, 132));
-                ((categoryItem) (back.categories.get(i))).selectChk.setBackground(Color.gray);
+//                ((CategoryItem) (back.categories.get(i))).selectChk.setBackground(new Color(249, 132, 132));
+                ((CategoryItem) (back.categories.get(i))).selectChk.setBackground(Color.gray);
                 back.ui.urlsPanel.itemsList.updateListView(back.urls.get(i));
             } else {
                 back.categories.get(i).setBackground(new Color(240, 240, 240));
-                ((categoryItem) (back.categories.get(i))).selectChk.setBackground(new Color(240, 240, 240));
+                ((CategoryItem) (back.categories.get(i))).selectChk.setBackground(new Color(240, 240, 240));
             }
         }
     }
 
     public void setCheckBoxStatus(ActionEvent e) {
         for (int i = 0; i < back.categories.size(); ++i) {
-            if (((categoryItem) back.categories.get(i)).selectChk.equals(e.getSource())) {
-                if (((categoryItem) back.categories.get(i)).selectChk.isSelected()) {
+            if (((CategoryItem) back.categories.get(i)).selectChk.equals(e.getSource())) {
+                if (((CategoryItem) back.categories.get(i)).selectChk.isSelected()) {
                     for (int j = 0; j < back.urls.get(i).size(); ++j)
-                        ((urlItem) back.urls.get(i).get(j)).selectChk.setSelected(true);
+                        ((URLItemPanel) back.urls.get(i).get(j)).selectChk.setSelected(true);
                 } else {
                     for (int j = 0; j < back.urls.get(i).size(); ++j)
-                        ((urlItem) back.urls.get(i).get(j)).selectChk.setSelected(false);
+                        ((URLItemPanel) back.urls.get(i).get(j)).selectChk.setSelected(false);
                 }
                 break;
             }

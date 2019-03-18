@@ -1,4 +1,4 @@
-package Models;
+package Logic;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,6 +6,12 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * this class listens on a specific port
+ *
+ * @author Ali ArjomandBigdeli
+ * @since 3.18.2018
+ */
 public class SocketListener implements Runnable {
     public ExecutorService pool;
     public boolean startStop;

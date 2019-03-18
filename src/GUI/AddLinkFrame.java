@@ -1,6 +1,6 @@
 package GUI;
 
-import Models.Backend;
+import Logic.Backend;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 
 /**
- * this class open New Download frame of JProxy application
+ * this class opens Add new url domain frame of JProxy application
  *
  * @author Ali ArjomandBigdeli
  * @since 3.18.2018
@@ -58,7 +58,7 @@ public class AddLinkFrame extends JFrame implements ActionListener {
         categoryCombo.setPreferredSize(new Dimension(100, categoryCombo.getPreferredSize().height));
 
         for (int i = 0; i < backend.categories.size(); ++i)
-            categoryCombo.addItem(((categoryItem) (backend.categories.get(i))).getCategoryName());
+            categoryCombo.addItem(((CategoryItem) (backend.categories.get(i))).getCategoryName());
 
         JLabel categoryLabel = new JLabel();
         categoryLabel.setIcon(new ImageIcon("icons/category.png"));

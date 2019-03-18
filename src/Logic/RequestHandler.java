@@ -1,4 +1,4 @@
-package Models;
+package Logic;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
