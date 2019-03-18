@@ -1,5 +1,7 @@
 package GUI;
 
+import Models.Backend;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -22,6 +24,8 @@ public class JProxy {
     private JToolBar categoryToolBar;   //Category tool bar
     private JToolBar dToolBar;  //url domain tool bar
 
+//    private Backend backend;
+
     private JProxy(String title) {
 //        Utils.setCategoryList(new ArrayList<>());
 //        Utils.setQueueList(new ArrayList<>());
@@ -35,6 +39,8 @@ public class JProxy {
 //        readInfo();
 
 //        Utils.setShowDList(Utils.getCategoryList());
+
+//        backend = new Backend(new Dimension(520, 600), 350, 150, this);
 
         setLookAndFeel();
 
@@ -291,9 +297,6 @@ public class JProxy {
                 case "Exit":
 //                    saveInfo();
                     System.exit(0);
-//                case "Add":
-//                    new AddFrame();
-//                    break;
                 case "Run/Pause":
                     // TODO: complete
                     break;
@@ -301,6 +304,7 @@ public class JProxy {
                     // TODO: complete
                     break;
                 case "Add Domain":
+//                    new AddLinkFrame(backend);
                     new AddLinkFrame();
                     break;
             }

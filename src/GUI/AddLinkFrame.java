@@ -1,5 +1,7 @@
 package GUI;
 
+import Models.Backend;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -21,9 +23,12 @@ public class AddLinkFrame extends JFrame implements ActionListener {
     private JButton cancelBtn;
     private JButton okBtn;
     private String linkStr;
+    private Backend backend;
 
+//    public AddLinkFrame(Backend backend) {
     public AddLinkFrame() {
         super("Add new URL domain");
+//        this.backend = backend;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -95,8 +100,30 @@ public class AddLinkFrame extends JFrame implements ActionListener {
         if (e.getSource().equals(cancelBtn)) {
             dispose();
         } else if (e.getSource().equals(okBtn)) {
-            linkStr = linkTxtFld.getText();
+//            linkStr = linkTxtFld.getText();
+            checkEnteredURL();
             dispose();
+        }
+    }
+
+    public void checkEnteredURL() {
+        boolean hasErr = false;
+        String text = linkTxtFld.getText();
+        if (text.equals(""))
+            hasErr = true;
+        if (!hasErr) {
+            if (text.contains("http://")) {
+                if (text.length() <= 7)
+                    hasErr = true;
+            } else {
+                hasErr = true;
+            }
+        }
+        if (hasErr) {
+            JOptionPane.showMessageDialog(null, "invalid url", "alert", JOptionPane.ERROR_MESSAGE);
+        } else {
+            backend.addNewUrl(text, categoryCombo.getSelectedIndex());
+            this.dispose();
         }
     }
 }
