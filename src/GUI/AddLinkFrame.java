@@ -25,10 +25,9 @@ public class AddLinkFrame extends JFrame implements ActionListener {
     private String linkStr;
     private Backend backend;
 
-//    public AddLinkFrame(Backend backend) {
-    public AddLinkFrame() {
+    public AddLinkFrame(Backend backend) {
         super("Add new URL domain");
-//        this.backend = backend;
+        this.backend = backend;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -57,6 +56,10 @@ public class AddLinkFrame extends JFrame implements ActionListener {
         JPanel categoryPanel = new JPanel(catFlowLayout);
         categoryCombo = new JComboBox();
         categoryCombo.setPreferredSize(new Dimension(100, categoryCombo.getPreferredSize().height));
+
+        for (int i = 0; i < backend.categories.size(); ++i)
+            categoryCombo.addItem(((categoryItem) (backend.categories.get(i))).getCategoryName());
+
         JLabel categoryLabel = new JLabel();
         categoryLabel.setIcon(new ImageIcon("icons/category.png"));
         categoryPanel.add(categoryLabel);

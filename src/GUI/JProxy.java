@@ -1,6 +1,7 @@
 package GUI;
 
 import Models.Backend;
+import Models.SocketListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,24 +24,18 @@ public class JProxy {
     private JLabel statusLabel;
     private JToolBar categoryToolBar;   //Category tool bar
     private JToolBar dToolBar;  //url domain tool bar
+    private JButton playPauseBtn;
 
-//    private Backend backend;
+    //panels
+    public ScrollablePanel urlsPanel;
+    public ScrollablePanel categoriesPanel;
+
+    private Backend backend;
+
+    public boolean stopStartStatus;
 
     private JProxy(String title) {
-//        Utils.setCategoryList(new ArrayList<>());
-//        Utils.setQueueList(new ArrayList<>());
-//        Utils.setCompletedList(new ArrayList<>());
-//        Utils.setRemovedList(new ArrayList<>());
-//        Utils.setQueueListQ(new LinkedList<>());
-//        Utils.setWaitedDownloadsQ(new LinkedList<>());
-
-//        Utils.setFilterList(new ArrayList<>());
-
-//        readInfo();
-
-//        Utils.setShowDList(Utils.getCategoryList());
-
-//        backend = new Backend(new Dimension(520, 600), 350, 150, this);
+        backend = new Backend(new Dimension(520, 600), 350, 150, this);
 
         setLookAndFeel();
 
@@ -58,9 +53,15 @@ public class JProxy {
         mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         mainFrame.setContentPane(mainPanel);
 
+
+        //init panels
+        urlsPanel = new URLsPanel(new Dimension(350, 485), backend);
+        categoriesPanel = new CategoryPanel(new Dimension(150, 485), backend);
+
         //left panel
         leftPanel = new JPanel(new BorderLayout(10, 10));
-        leftPanel.setBackground(new Color(50, 54, 63));
+//        leftPanel.setBackground(new Color(50, 54, 63));
+        leftPanel.setBackground(Color.GRAY);
         JLabel logoLabel = new JLabel();
         logoLabel.setIcon(new ImageIcon("icons/logo.png"));
         logoLabel.setSize(new Dimension(180, 180));
@@ -73,12 +74,15 @@ public class JProxy {
         rightPanel.setBackground(new Color(231, 239, 251));
         initTopToolBar(listenerHandler);
 
+
         initScrollPanel();
 
         mainPanel.add(rightPanel, BorderLayout.CENTER);
         mainPanel.add(leftPanel, BorderLayout.WEST);
 
         initSystemTray();
+
+        backend.loadDataFromFile();
     }
 
     public static JProxy getINSTANCE() {
@@ -111,10 +115,12 @@ public class JProxy {
         int numOfBtn = 4;
         JToolBar topToolBar = new JToolBar();
         JButton[] toolbarBtn = new JButton[numOfBtn];
+        playPauseBtn = new JButton();
         ImageIcon[] imageIcon = new ImageIcon[numOfBtn];
         for (int i = 0; i < numOfBtn; i++) {
             toolbarBtn[i] = new JButton();
         }
+        toolbarBtn[0] = playPauseBtn;
         imageIcon[0] = new ImageIcon("icons/Play.png");
         toolbarBtn[0].setToolTipText("Run/Pause");
         imageIcon[1] = new ImageIcon("icons/addCat.png");
@@ -125,7 +131,7 @@ public class JProxy {
         toolbarBtn[3].setToolTipText("Exit");
 
         statusLabel = new JLabel("<html> Status : OFF<BR> Port : <BR> IP : 127.0.0.1<BR>Select checkboxes to allow traffic</html>");
-        statusLabel.setForeground(Color.GRAY);
+        statusLabel.setForeground(Color.BLACK);
 
         for (int i = 0; i < numOfBtn; i++) {
             toolbarBtn[i].setIcon(imageIcon[i]);
@@ -146,6 +152,7 @@ public class JProxy {
     }
 
     private void initCategoryToolBar(CListenerHandler listenerHandler) {
+
         categoryToolBar = new JToolBar(1);
         categoryToolBar.setBackground(new Color(231, 239, 251));
         JPanel progressPanel = new JPanel(new BorderLayout());
@@ -155,7 +162,8 @@ public class JProxy {
 
         JPanel scrollPanel = new JPanel(new BorderLayout());
         scrollPanel.add(new JScrollPane(progressPanel), BorderLayout.CENTER); //should add to CENTER
-        leftPanel.add(scrollPanel, BorderLayout.CENTER);
+//        leftPanel.add(scrollPanel, BorderLayout.CENTER);
+        leftPanel.add(categoriesPanel, BorderLayout.CENTER);
         categoryToolBar.setBackground(new Color(50, 54, 63));
 
         categoryToolBar.removeAll();
@@ -225,14 +233,15 @@ public class JProxy {
 
         JPanel scrollPanel = new JPanel(new BorderLayout());
         scrollPanel.add(new JScrollPane(progressPanel), BorderLayout.CENTER); //should add to CENTER
-        rightPanel.add(scrollPanel, BorderLayout.CENTER);
+//        rightPanel.add(scrollPanel, BorderLayout.CENTER);
+        rightPanel.add(urlsPanel, BorderLayout.CENTER);
 
         updateDownloadList();
     }
 
     public void showGUI() {
         System.out.println(mainFrame.getPreferredSize());
-        mainFrame.setMinimumSize(new Dimension(480 + 250, 370 + 50));
+        mainFrame.setMinimumSize(new Dimension(480 + 200, 370 + 50));
         mainFrame.setPreferredSize(new Dimension(480 + 295, 370 + 150));
         mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
@@ -249,63 +258,62 @@ public class JProxy {
         rightPanel.repaint();
     }
 
-//    private void readInfo() {
-//        File file1 = new File(Utils.getdInfoPath() + "list.jdm");
-//        if (file1.exists()) {
-//            ArrayList<DItemInfo> processingData;
-//            processingData = Utils.fileReader(file1);
-//            for (DItemInfo dItemInfo : processingData) {
-//                DItemPanel dItemPanel = new DItemPanel(dItemInfo);
-//                if (Utils.getCategoryList().size() > 0)
-//                    dItemPanel.setIndex(Utils.getCategoryList().size());
-//                Utils.getCategoryList().add(dItemPanel);
-////                setDItemMouseListener(dItemPanel);
-//            }
-//        }
-//
-//        File file5 = new File(Utils.getdInfoPath() + "filter.jdm");
-//        if (file5.exists()) {
-//            Utils.setFilterList(Utils.fileReader(file5));
-//            StringBuilder str = new StringBuilder();
-//            for (int i = 0; i < Utils.getFilterList().size(); i++) {
-//                if (i % 3 == 2 || Utils.getFilterList().get(i).length() > 30)
-//                    str.append(Utils.getFilterList().get(i)).append("\n");
-//                else
-//                    str.append(Utils.getFilterList().get(i)).append(" ");
-//            }
-//            Utils.setFilterSitesString(str.toString());
-//        }
-//
-//    }
+    private void addNewCategory() {
+        String inputValue = JOptionPane.showInputDialog("Please input the name of Category");
+        if (inputValue != null && !inputValue.equals("")) {
+            backend.addCategory(inputValue);
+        }
+    }
 
-//    private void saveInfo() {
-//        ArrayList<DItemInfo> processingData = new ArrayList<>();
-//        for (DItemPanel dItemPanel : Utils.getCategoryList()) {
-//            processingData.add(dItemPanel.getDItemInfo());
-//        }
-//        Utils.fileWriter("list.jdm", processingData);
-//
-//        Utils.fileWriter("settings.jdm", SettingsField.getINSTANCE());
-//
-//        Utils.fileWriter("filter.jdm", Utils.getFilterList());
-//    }
+    private void saveAndExit() {
+        try {
+            backend.saveDataToFile();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+    private void startStopProxyController() throws IOException {
+        if (stopStartStatus) { // start -> stop
+            backend.stopProxy();
+            statusLabel.setText("<html> Status : OFF<BR> Port : <BR> IP : 127.0.0.1<BR>Select checkboxes to allow traffic</html>");
+            playPauseBtn.setIcon(new ImageIcon("./icons/Play.png"));
+            stopStartStatus = false;
+        } else { // stop -> start
+            makeBlockList();
+            backend.startProxy();
+            statusLabel.setText("<html> Status : ON<BR> Port : " + ((SocketListener) backend.r).serverPort + "<BR> IP : 127.0.0.1<BR>" +
+                    "Select checkboxes to allow traffic </html>");
+            playPauseBtn.setIcon(new ImageIcon("./icons/Pause.png"));
+            stopStartStatus = true;
+        }
+    }
+
+    private void makeBlockList() {
+        backend.makeBlockedList();
+    }
 
     public class CListenerHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "Exit":
-//                    saveInfo();
-                    System.exit(0);
+                    saveAndExit();
                 case "Run/Pause":
-                    // TODO: complete
+                    try {
+                        startStopProxyController();
+                    } catch (IOException e1) {
+                        System.err.println("Can not stop server");
+                    }
                     break;
                 case "Add Category":
-                    // TODO: complete
+                    addNewCategory();
                     break;
                 case "Add Domain":
-//                    new AddLinkFrame(backend);
-                    new AddLinkFrame();
+                    AddLinkFrame tmp = new AddLinkFrame(backend);
                     break;
             }
         }

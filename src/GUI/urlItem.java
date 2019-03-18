@@ -23,6 +23,7 @@ public class urlItem extends ListItem {
         selectChk = new JCheckBox();
         urlText = new JTextField(UrlAddress);
         deleteBTN = new JButton(new ImageIcon("./icons/delete.png"));
+        deleteBTN = new JButton(new ImageIcon("./icons/remove.png"));
 
         deleteBTN.setFocusPainted(false);
         //add to layout
