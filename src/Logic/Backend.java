@@ -20,6 +20,8 @@ import java.util.ArrayList;
  * @since 3.18.2018
  */
 public class Backend {
+    private static final String CACHE_PATH = "./cacheData";
+
     private static ArrayList<String> blockedList;
     public static ArrayList<ListItem> categories;
     public static ArrayList<ArrayList<ListItem>> urls;
@@ -94,9 +96,9 @@ public class Backend {
      * load saved categories and all urls belong to it
      */
     public void loadDataFromFile() {
-        Path p = Paths.get("./AppData");
+        Path p = Paths.get(CACHE_PATH);
         if (Files.exists(p)) {
-            final File folder = new File("./AppData");
+            final File folder = new File(CACHE_PATH);
             for (final File fileEntry : folder.listFiles()) {
                 //create category
                 addCategory(fileEntry.getName().substring(0, fileEntry.getName().lastIndexOf('.')));
@@ -120,12 +122,12 @@ public class Backend {
      * @throws UnsupportedEncodingException
      */
     public void saveDataToFile() throws FileNotFoundException, UnsupportedEncodingException {
-        final File folder = new File("./AppData");
+        final File folder = new File(CACHE_PATH);
         for (final File fileEntry : folder.listFiles())
             fileEntry.delete();
 
         for (int i = 0; i < categories.size(); i++) {
-            PrintWriter writer = new PrintWriter("./AppData/" + ((CategoryItem) categories.get(i)).getCategoryName() + ".txt", "UTF-8");
+            PrintWriter writer = new PrintWriter(CACHE_PATH + "/" + ((CategoryItem) categories.get(i)).getCategoryName() + ".txt", "UTF-8");
             for (int j = 0; j < urls.get(i).size(); j++)
                 writer.println(((URLItemPanel) urls.get(i).get(j)).getUrlAddress());
             writer.close();
