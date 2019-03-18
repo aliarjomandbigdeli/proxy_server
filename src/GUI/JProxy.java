@@ -82,7 +82,7 @@ public class JProxy {
         return INSTANCE;
     }
 
-    private void setLookAndFeel(){
+    private void setLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException e) {
@@ -301,7 +301,7 @@ public class JProxy {
                     // TODO: complete
                     break;
                 case "Add Domain":
-                    // TODO: complete
+                    new AddLinkFrame();
                     break;
             }
         }
